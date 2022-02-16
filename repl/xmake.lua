@@ -1,6 +1,6 @@
 target("psyrepl")
 do
-    set_kind("console")
+    set_kind("binary")
     add_files("src/**.c")
     add_headerfiles("src/**.h")
     add_deps("psyc")
