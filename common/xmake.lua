@@ -1,4 +1,4 @@
-target("psy-common")
+target("psycommon")
 do
     set_kind("headeronly")
     add_headerfiles("src/**.h")
