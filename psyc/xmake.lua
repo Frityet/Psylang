@@ -4,5 +4,6 @@ do
     add_files("src/**.c")
     add_headerfiles("src/**.h")
     add_includedirs("src/", { public = true })
+    add_deps("psycommon")
 end
 target_end()

@@ -1,4 +1,4 @@
-includes("repl", "psyc")
+includes("repl", "psyc", "common")
 
 add_cflags("-Wall", "-Wextra", "-Werror")
 
