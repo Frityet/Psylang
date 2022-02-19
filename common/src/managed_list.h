@@ -6,10 +6,15 @@
 
 #include "list.h"
 
-//#if !__has_feature(cleanup)
-//#error Managed lists requires the cleanup attribute present in GCC/Clang!
-//#endif
-
+/**
+ * @brief Generic type defining an automatically deallocating list.
+ *
+ * @example
+ * @code
+ * List_tp(int) list = LIST(int);
+ * //automatically deallocated!
+ * @endcode
+ */
 #define List_tp(_type) __attribute__((cleanup(autocleanup_list))) _type *
 
 static inline void autocleanup_list(void *list)

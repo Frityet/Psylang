@@ -12,8 +12,12 @@
 
 #include "psyc_types.h"
 
+/**
+ * @brief Gets the address of an expression.
+ * @example
+ * @code ADDRESS_OF(5 - 3) @endcode
+ */
 #define ADDRESS_OF(__VA_ARGS__) ({ __auto_type _tmp = (__VA_ARGS__); &_tmp; })
-#define EVAL(_x) _x
 
 //May god forgive me for this
 #define _LIST_1(type, ...)                                              new_list(2, sizeof(type), NULL)
@@ -22,34 +26,82 @@
 //#define _LIST_2(type, count)                                        new_list(count, sizeof(type), NULL)
 //#define _LIST_3(type, count, dtor)                                  new_list(count, sizeof(type), dtor)
 #define _LIST_REDIRECTOR(n, type, dtor_or_count, func, FUNC, ...)   FUNC
+
+/**
+ * @brief Creates a list.
+ * @param type      Type to be used with this list.
+ * @param dtor      Function to be called on every item of the list once deallocation is to occur. Defaults to @c NULL.
+ * @param count     Amount to preallocate with this call. Defaults to 2.
+ * @returns Pointer to the allocated list.
+ *
+ * @example
+ * @code
+ * int *list1 = LIST(int);
+ * MyType_t *list2 = LIST(MyType_t, mytype_deallocator);
+ * uint64_t *list3 = LIST(MyType_t, NULL, 1024);
+ * @endcode
+ */
 #define LIST(...) _LIST_REDIRECTOR(, ##__VA_ARGS__, _LIST_3(__VA_ARGS__), _LIST_2(__VA_ARGS__), _LIST_1(__VA_ARGS__))
-//#define ADD_ITEM(_list, _item) ({                                               \
-//                                    struct ListData *_ld = dataof_list(_list);  \
-//                                    if (_ld->count >= _ld->max - 1) {           \
-//                                        if (!grow_list((void **)&_list)) {      \
-//                                           NULL;                                \
-//                                        } else {                                \
-//                                            _ld = dataof_list(_list);           \
-//                                        }                                       \
-//                                    }                                           \
-//                                    _list[_ld->count] = (_item);                \
-//                                    _ld->count++;                               \
-//                               })
 
-typedef void FreeItem_f(void *);
+/**
+ * @brief Function type for freeing a list.
+ * @param ptr pointer to the item in the list.
+ */
+typedef void FreeItem_f(void *ptr);
 
+/**
+ * @brief Holds all the information about the list.
+ */
 struct ListData {
-    size_t      size, typesize, count, max;
+    /**
+     * @brief Total size of the list.
+     */
+    size_t  size;
+
+    /**
+     * @brief Size of the type.
+     */
+    size_t typesize;
+
+    /**
+     * @brief Amount items currently in this list.
+     */
+    size_t count;
+
+    /**
+     * @brief Max amount items this list can hold.
+     */
+    size_t max;
+
+    /**
+     * @brief Function to be called on every item in the list on deallocation of the list.
+     */
     FreeItem_f  *free_item;
+
+    /**
+     * @brief Pointer to the raw data the list holds.
+     */
     void        *data;
 };
 
+/**
+ * @brief Gets the data header of the specified list.
+ * @param ptr List to get the header of.
+ * @return the header (ListData), or NULL if the pointer is not a list.
+ */
 static inline struct ListData *dataof_list(void *ptr)
 {
     struct ListData *list = ptr - sizeof(struct ListData);
     return list->data == ptr ? list : NULL;
 }
 
+/**
+ * @brief Creates a new list
+ * @param count     Amount of items to preallocate.
+ * @param size      Size of each item.
+ * @param free_item Function, which will be called upon deallocation on each item of the list.
+ * @return
+ */
 __attribute__((used))
 static void *new_list(size_t count, size_t size, FreeItem_f free_item)
 {
@@ -67,30 +119,54 @@ static void *new_list(size_t count, size_t size, FreeItem_f free_item)
     return list->data;
 }
 
+/**
+ * @brief Gets the total size of the list.
+ * @param ptr Pointer to the list.
+ * @return Size of the list, or @c NULL if the list pointer is invalid.
+ */
 static inline size_t sizeof_list(void *ptr)
 {
     struct ListData *list = dataof_list(ptr);
     return list == NULL ? 0 : list->size;
 }
 
+/**
+ * @brief Gets the amount of items in the list.
+ * @param ptr Pointer to the list.
+ * @return Amount of items in the list, or @c NULL if the list pointer is invalid.
+ */
 static inline size_t lengthof_list(void *ptr)
 {
     struct ListData *list = dataof_list(ptr);
     return list == NULL ? 0 : list->count;
 }
 
+/**
+ * @brief Gets the size of the type of one item in the list.
+ * @param ptr Pointer to the list.
+ * @return Typesize of one item in the list, or @c NULL if the list pointer is invalid.
+ */
 static inline size_t typesizeof_list(void *ptr)
 {
     struct ListData *list = dataof_list(ptr);
     return list == NULL ? 0 : list->typesize;
 }
 
+/**
+ * @brief Gets the deallocator function of the list.
+ * @param ptr Pointer to the list.
+ * @return Deallocator of the list, or @c NULL if the list pointer is invalid.
+ */
 static inline FreeItem_f *deallocatorof_list(void *ptr)
 {
     struct ListData *list = dataof_list(ptr);
     return list == NULL ? NULL : list->free_item;
 }
 
+/**
+ * @brief Frees the specified list.
+ * @param ptr Pointer to the list to be freed.
+ */
 static void free_list(void *ptr)
 {
     struct ListData *ld = dataof_list(ptr);
@@ -107,6 +183,12 @@ static void free_list(void *ptr)
 
     free(dataof_list(ptr));
 }
+
+/**
+ * @brief Exponentially increases the size of the list.
+ * @param ptr Address of the pointer to the list to grow.
+ * @return Pointer to the new, grown, list (the pointer is also set to this value) or NULL if it could not be grown.
+ */
 __attribute__((used))
 static void *grow_list(void **ptr)
 {
@@ -137,6 +219,19 @@ static void *grow_list(void **ptr)
     return list->data;
 }
 
+/**
+ * @brief Adds an item to the list.
+ * @param arg Address of the pointer to the list.
+ * @param item Address of the item to add to the list.
+ * @return True if successfully added to the list, false otherwise.
+ *
+ * @example
+ * @code
+ * int *list = LIST(int);
+ * push_list(&list, ADDRESS_OF(10));
+ * push_list(&list, ADDRESS_OF(4));
+ * @endcode
+ */
 __attribute__((used))
 static bool push_list(void *arg, void *item)
 {
