@@ -228,12 +228,12 @@ static void *grow_list(void **ptr)
  * @example
  * @code
  * int *list = LIST(int);
- * push_list(&list, ADDRESS_OF(10));
- * push_list(&list, ADDRESS_OF(4));
+ * push_to_list(&list, ADDRESS_OF(10));
+ * push_to_list(&list, ADDRESS_OF(4));
  * @endcode
  */
 __attribute__((used))
-static bool push_list(void *arg, void *item)
+static bool push_to_list(void *arg, void *item)
 {
     void **ptr = (void **)arg;
     struct ListData *list = dataof_list(*ptr);
@@ -256,4 +256,21 @@ static bool push_list(void *arg, void *item)
     *ptr = list->data;
 //    printf("Pushed item to list: (ptr: %p, item: %p, count: %zu)\n", *ptr, item, list->count);
     return true;
+}
+
+static void *copy_list(void *src)
+{
+    struct ListData *srcdata = dataof_list(src);
+    if (srcdata == NULL) {
+        return NULL;
+    }
+
+    void *newlist = new_list(srcdata->count, srcdata->typesize, srcdata->free_item);
+    if (newlist == NULL) {
+        return NULL;
+    }
+    
+    memcpy(newlist, srcdata->data, srcdata->count * srcdata->typesize);
+
+    return newlist;
 }
