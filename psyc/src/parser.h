@@ -1,12 +1,13 @@
 #pragma once
 
-#include <stdint.h>
-#include <stddef.h>
+#include <psyc_types.h>
 
-struct Token; //Replace when lexer implemented
+//Replace when lexer implemented
+struct Token;
+struct Lexer { struct Token *tokens; };
 
 struct Parser {
     struct Token    *tokens;
-    size_t          token_count;
 };
 
+bool parse_tokens(struct Parser *parser, struct Lexer lex);

@@ -1,0 +1,76 @@
+#Variable assignment
+a <- 5
+
+#Print
+DISPLAY(a)
+
+#User input
+input <- INPUT()
+DISPLAY(input)
+
+#Arithmetic
+b <- a + 2
+b <- a - 2
+b <- a * 2
+b <- a / 2
+b <- a MOD 2
+
+#Random
+rand <- RANDOM(b, a)
+DISPLAY(rand)
+
+#Boolean operators
+bool <- rand = b
+bool <- rand != b
+bool <- rand > b
+bool <- rand < b
+bool <- rand >= b
+bool <- rand <- b
+
+bool <- NOT a
+bool <- bool AND a
+bool <- bool OR a
+
+#Lists
+list <- [ a, b, bool ]
+
+INSERT(list, 2, 5)
+APPEND(list, 19)
+REMOVE(list, 2)
+list_len <- LENGTH(list)
+
+#Selection
+IF (bool)
+{
+    #
+}
+ELSE
+{
+    #
+}
+
+REPEAT a TIMES
+{
+    #
+}
+
+REPEAT UNTIL (bool)
+{
+    #
+}
+
+FOR EACH item IN list
+{
+
+}
+
+#Functions
+PROCEDURE func()
+{
+
+}
+
+PROCEDURE func2(arg)
+{
+    return arg - list[2]
+}

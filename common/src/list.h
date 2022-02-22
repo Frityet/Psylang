@@ -269,7 +269,7 @@ static void *copy_list(void *src)
     if (newlist == NULL) {
         return NULL;
     }
-    
+
     memcpy(newlist, srcdata->data, srcdata->count * srcdata->typesize);
 
     return newlist;

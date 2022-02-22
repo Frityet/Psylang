@@ -1,0 +1,22 @@
+PROCEDURE FIZZ_BUZZ(n)
+{
+    FOR i IN n TIMES
+    {
+        IF i MOD 3 = 0
+        {
+            DISPLAY("Fizz")
+        }
+        ELSE IF i MOD 5 = 0
+        {
+            DISPLAY("Buzz")
+        }
+        ELSE IF i MOD 3 = 0 AND i MOD 5 = 0
+        {
+            DISPLAY("FizzBuzz")
+        }
+        ELSE
+        {
+            DISPLAY(i)
+        }
+    }
+}
