@@ -3,6 +3,7 @@ do
     set_kind("binary")
     add_files("src/**.c")
     add_headerfiles("src/**.h")
+    add_cflags("")
     add_deps("psyc")
 end
 target_end()

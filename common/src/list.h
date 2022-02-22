@@ -11,6 +11,7 @@
 //#include <stdio.h>
 
 #include "psyc_types.h"
+#include "utilities.h"
 
 /**
  * @brief Gets the address of an expression.
@@ -91,6 +92,9 @@ struct ListData {
  */
 static inline struct ListData *dataof_list(void *ptr)
 {
+    if (ptr == NULL) {
+        return NULL;
+    }
     struct ListData *list = ptr - sizeof(struct ListData);
     return list->data == ptr ? list : NULL;
 }
@@ -102,7 +106,7 @@ static inline struct ListData *dataof_list(void *ptr)
  * @param free_item Function, which will be called upon deallocation on each item of the list.
  * @return
  */
-__attribute__((used))
+ATTRIBUTE(used)
 static void *new_list(size_t count, size_t size, FreeItem_f free_item)
 {
     size_t total = count * size;
@@ -126,6 +130,9 @@ static void *new_list(size_t count, size_t size, FreeItem_f free_item)
  */
 static inline size_t sizeof_list(void *ptr)
 {
+    if (ptr == NULL) {
+        return 0;
+    }
     struct ListData *list = dataof_list(ptr);
     return list == NULL ? 0 : list->size;
 }
@@ -137,6 +144,9 @@ static inline size_t sizeof_list(void *ptr)
  */
 static inline size_t lengthof_list(void *ptr)
 {
+    if (ptr == NULL) {
+        return 0;
+    }
     struct ListData *list = dataof_list(ptr);
     return list == NULL ? 0 : list->count;
 }
@@ -148,6 +158,9 @@ static inline size_t lengthof_list(void *ptr)
  */
 static inline size_t typesizeof_list(void *ptr)
 {
+    if (ptr == NULL) {
+        return 0;
+    }
     struct ListData *list = dataof_list(ptr);
     return list == NULL ? 0 : list->typesize;
 }
@@ -159,6 +172,9 @@ static inline size_t typesizeof_list(void *ptr)
  */
 static inline FreeItem_f *deallocatorof_list(void *ptr)
 {
+    if (ptr == NULL) {
+        return NULL;
+    }
     struct ListData *list = dataof_list(ptr);
     return list == NULL ? NULL : list->free_item;
 }
@@ -189,7 +205,7 @@ static void free_list(void *ptr)
  * @param ptr Address of the pointer to the list to grow.
  * @return Pointer to the new, grown, list (the pointer is also set to this value) or NULL if it could not be grown.
  */
-__attribute__((used))
+ATTRIBUTE(used)
 static void *grow_list(void **ptr)
 {
     struct ListData *list = dataof_list(*ptr);
@@ -219,6 +235,8 @@ static void *grow_list(void **ptr)
     return list->data;
 }
 
+#define PUSH_LIST(_list, _item) push_to_list(&(_list), &(_item))
+
 /**
  * @brief Adds an item to the list.
  * @param arg Address of the pointer to the list.
@@ -232,13 +250,13 @@ static void *grow_list(void **ptr)
  * push_to_list(&list, ADDRESS_OF(4));
  * @endcode
  */
-__attribute__((used))
+ATTRIBUTE(used)
 static bool push_to_list(void *arg, void *item)
 {
     void **ptr = (void **)arg;
     struct ListData *list = dataof_list(*ptr);
     if (list == NULL) {
-//        fprintf(stderr, "List is null?\n(ptr: %p, item: %p, list: %p)\n", *ptr, item, list);
+        fprintf(stderr, "List is null?\n(ptr: %p, item: %p, list: %p)\n", *ptr, item, list);
         return false;
     }
 
@@ -258,6 +276,7 @@ static bool push_to_list(void *arg, void *item)
     return true;
 }
 
+ATTRIBUTE(unused)
 static void *copy_list(void *src)
 {
     struct ListData *srcdata = dataof_list(src);

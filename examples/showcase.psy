@@ -72,5 +72,5 @@ PROCEDURE func()
 
 PROCEDURE func2(arg)
 {
-    return arg - list[2]
+    return arg - list[1]
 }

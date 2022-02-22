@@ -2,9 +2,7 @@
 
 #include <psyc_types.h>
 
-//Replace when lexer implemented
-struct Token;
-struct Lexer { struct Token *tokens; };
+#include "lexer.h"
 
 struct Parser {
     struct Token    *tokens;

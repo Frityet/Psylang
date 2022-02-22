@@ -8,5 +8,7 @@
 
 bool parse_tokens(struct Parser *parser, struct Lexer lex)
 {
-
+    (void)parser;
+    (void)lex;
+    return false;
 }
