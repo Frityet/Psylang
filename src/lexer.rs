@@ -203,7 +203,7 @@ impl Lexer {
             "RETURN" => self.add_token(TokenType::RETURN),
             "MOD" => self.add_token(TokenType::MOD),
             "FOR" => self.add_token(TokenType::FOR),
-            "FOR" => self.add_token(TokenType::IN),
+            "IN" => self.add_token(TokenType::IN),
             _ => self.add_token(TokenType::IDENTIFIER),
         }
     }
