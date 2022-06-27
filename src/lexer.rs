@@ -1,5 +1,6 @@
 #[allow(non_camel_case_types)]
 #[derive(Debug, Copy, Clone)]
+
 enum TokenType {
     OPEN_CURLY,
     CLOSE_CURLY,
@@ -27,6 +28,8 @@ enum TokenType {
     REPEAT,
     TIMES,
     UNTIL,
+    FOR,
+    IN,
     PROCEDURE,
     RETURN,
     STRING,
@@ -199,6 +202,8 @@ impl Lexer {
             "UNTIL" => self.add_token(TokenType::UNTIL),
             "RETURN" => self.add_token(TokenType::RETURN),
             "MOD" => self.add_token(TokenType::MOD),
+            "FOR" => self.add_token(TokenType::FOR),
+            "FOR" => self.add_token(TokenType::IN),
             _ => self.add_token(TokenType::IDENTIFIER),
         }
     }
