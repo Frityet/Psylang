@@ -1,14 +1,14 @@
-pub enum Expr {
+pub enum Expression {
     Literal(Value),
     Identifier(String),
     BinaryOperator {
         operator: Token,
-        right_side: Expr,
-        left_side: Expr,
+        right_expression: Expression,
+        left_expression: Expression,
     },
     UnaryOperator {
         operator: Token,
-        left_side: Expr,
+        left_expression: Expression,
     },
     ProcCall {
         identifier: String,
@@ -17,6 +17,6 @@ pub enum Expr {
 }
 
 pub enum Value {
-    Float(f64),
+    Number(f64),
     String(String),
 }
