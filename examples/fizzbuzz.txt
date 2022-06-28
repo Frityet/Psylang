@@ -1,0 +1,20 @@
+PROCEDURE fizz_buzz(n) {
+    REPEAT UNTIL (n < 1) {
+    	IF (n MOD 15) {
+        	DISPLAY("FizzBuzz")
+        } ELSE {
+        	IF (n MOD 3) {
+            	DISPLAY("FIZZ")
+            } ELSE {
+            	IF (n MOD 5) {
+                	DISPLAY("Buzz")
+                } ELSE {
+                	DISPLAY(n)
+                }
+            }
+        }
+	n <- n - 1
+    }
+}
+
+fizz_buzz(100)
