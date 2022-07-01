@@ -1,22 +1,19 @@
+mod operator;
+
 pub enum Expression {
-    Literal(Value),
+    Literal(Type),
     Identifier(String),
     BinaryOperator {
-        operator: Token,
+        operator: Operator,
         right_expression: Expression,
         left_expression: Expression,
     },
     UnaryOperator {
-        operator: Token,
+        operator: Operator,
         left_expression: Expression,
     },
     ProcCall {
-        identifier: String,
-        arguments: Vec<String>,
+        identifier: Identifier,
+        arguments: Option<Vec<Expression>>,
     },
-}
-
-pub enum Value {
-    Number(f64),
-    String(String),
 }
