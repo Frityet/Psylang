@@ -3,7 +3,7 @@ PROCEDURE fizz_buzz(n) {
     	IF (n MOD 15) {
         	DISPLAY("FizzBuzz")
         } ELSE {
-        	IF (n MOD 3) {
+            IF (n MOD 3) {
             	DISPLAY("FIZZ")
             } ELSE {
             	IF (n MOD 5) {
